@@ -52,3 +52,6 @@ for epoch in range(1):
             print(f'Batch {batch_idx}, Loss: {loss.item():.4f}')
 
 print("Training finished!")
+# ===== 强制保存模型（调试用）=====
+torch.save(model.state_dict(), "mnist_cnn.pth")
+print(">>> Model force-saved as mnist_cnn.pth")
