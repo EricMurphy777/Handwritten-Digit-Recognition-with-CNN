@@ -1,39 +1,33 @@
-手写数字识别——基于卷积神经网络（PyTorch实现）
-本项目实现了一个简单的卷积神经网络（CNN），用于识别MNIST数据集中的手写数字。
+# Handwritten Digit Recognition with CNN (PyTorch)
 
-项目背景
-该项目灵感来源于我在“神经科学与类脑智能”课程中的学习。
-我特别关注生物视觉系统的层级化处理机制如何抽象为CNN等计算模型。
+This project implements a simple Convolutional Neural Network (CNN) to recognize handwritten digits using the MNIST dataset.
 
-网络架构
-两个卷积层（用于局部特征提取，模拟感受野机制）
+## Motivation
+The project was inspired by my coursework in Neuroscience and Brain-Inspired Intelligence.  
+In particular, I was interested in how hierarchical visual processing in biological systems can be abstracted into computational models such as CNNs.
 
-最大池化层（实现空间抽象）
+## Model Architecture
+- Two convolutional layers for local feature extraction (receptive fields)
+- Max pooling for spatial abstraction
+- Fully connected layers for classification
 
-全连接层（完成分类任务）
+## Implementation Details
+- Framework: PyTorch (CPU-only)
+- Dataset: MNIST
+- Loss function: Cross-Entropy Loss
+- Optimizer: Adam
 
-实现细节
-框架：PyTorch（仅使用CPU）
+During implementation, I encountered a dimension mismatch issue between convolutional outputs and the fully connected layer.  
+By analyzing the feature map sizes, I corrected the network design and successfully trained the model.
 
-数据集：MNIST
+## Key Takeaways
+- Practical understanding of how spatial dimensions change through convolution and pooling
+- Hands-on experience debugging neural network architectures
+- A concrete connection between biological visual perception and artificial neural networks
 
-损失函数：交叉熵损失
+## Future Work
+- Visualize learned convolutional filters
+- Compare CNN performance with fully connected networks
 
-优化器：Adam
+- Explore more biologically inspired architectures
 
-在实现过程中，我曾遇到卷积层输出与全连接层维度不匹配的问题。
-通过分析特征图尺寸的变化规律，我修正了网络设计并成功完成了模型训练。
-
-核心收获
-深入理解了卷积和池化过程中空间尺寸的变化机制
-
-获得了调试神经网络架构的实践经验
-
-建立了生物视觉感知与人工神经网络之间的具体联系
-
-未来工作
-可视化学习到的卷积滤波器
-
-对比CNN与全连接网络的性能差异
-
-探索更具生物启发性的网络架构
