@@ -1,12 +1,13 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from PIL import Image
 import torchvision.transforms as transforms
 
-# ===== 和训练时完全一样的模型结构 =====
-class Net(nn.Module):
+# ===== model definition（和训练时一模一样）=====
+class SimpleCNN(nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(1, 16, 3, 1)
         self.conv2 = nn.Conv2d(16, 32, 3, 1)
         self.fc1 = nn.Linear(32 * 12 * 12, 128)
@@ -18,29 +19,32 @@ class Net(nn.Module):
         x = torch.max_pool2d(x, 2)
         x = torch.flatten(x, 1)
         x = torch.relu(self.fc1(x))
-        x = self.fc2(x)
-        return x
+        return self.fc2(x)
 
-
-# ===== 加载训练好的模型 =====
-model = Net()
+# ===== load model =====
+model = SimpleCNN()
 model.load_state_dict(torch.load("mnist_cnn.pth", map_location="cpu"))
 model.eval()
 
-# ===== 图像预处理（关键）=====
+# ===== image preprocessing =====
+img = Image.open(r"C:\Users\EricM\Desktop\AI_digit project\my_digit.jpg").convert("L")
+img = img.resize((28, 28))
+img = transforms.functional.invert(img)
+
 transform = transforms.Compose([
-    transforms.Grayscale(),        # 转灰度
-    transforms.Resize((28, 28)),   # MNIST 尺寸
     transforms.ToTensor(),
     transforms.Normalize((0.1307,), (0.3081,))
 ])
 
-# ===== 读取并预测图片 =====
-img = Image.open("my_digit.jpg")
-img = transform(img).unsqueeze(0)
+img_tensor = transform(img).unsqueeze(0)
 
+# ===== inference =====
 with torch.no_grad():
-    output = model(img)
-    pred = output.argmax(dim=1)
+    output = model(img_tensor)
+    probs = F.softmax(output, dim=1)
+    pred = probs.argmax(dim=1)
 
 print("Predicted digit:", pred.item())
+print("Probabilities:")
+for i in range(10):
+    print(f"{i}: {probs[0][i].item():.2f}")
